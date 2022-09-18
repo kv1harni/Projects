@@ -10,7 +10,23 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-cursor.execute("CREATE TABLE IF NOT EXSIST EmpData (username VARCHAR(20), password VARCHAR(20), email VARCHAR(32))")
+cursor.execute("""CREATE TABLE IF NOT EXISTS EmpData (
+	uid INT(16) PRIMARY KEY AUTO_INCREMENT, 
+	username VARCHAR(20) NOT NULL, 
+	password VARCHAR(20) NOT NULL, 
+	email VARCHAR(32)
+	);""")
+
+cursor.execute("""
+	INSERT INTO EmpData(uid, username, password, email) VALUES(1, 'arceusomkar7', 'password_', 'xyz@mail.com')
+	""")
+
+cursor.execute("SELECT * FROM EmpData;")
+
+data = cursor.fetchall()
+
+for rows in data:
+	print(rows)
 
 
 class IrctcApp:
