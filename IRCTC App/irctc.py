@@ -1,4 +1,3 @@
-
 import mysql.connector
 
 
@@ -11,7 +10,7 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-cursor.execute("CREATE TABLE EmpData (username VARCHAR(20), password VARCHAR(20), email VARCHAR(32))")
+cursor.execute("CREATE TABLE IF NOT EXSIST EmpData (username VARCHAR(20), password VARCHAR(20), email VARCHAR(32))")
 
 
 class IrctcApp:
