@@ -2,18 +2,16 @@
 import mysql.connector
 
 
-mydb = mysql.connector.connect(
+conn = mysql.connector.connect(
   host="localhost",
   user="root",
   password="1234",
   database="admin"
 )
 
-print(mydb)
+cursor = conn.cursor()
 
-mycursor = mydb.cursor()
-
-mycursor.execute("CREATE TABLE EmpData (username VARCHAR(255), password VARCHAR(255), email VARCHAR(255))")
+cursor.execute("CREATE TABLE EmpData (username VARCHAR(20), password VARCHAR(20), email VARCHAR(32))")
 
 
 class IrctcApp:
