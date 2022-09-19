@@ -5,7 +5,7 @@ conn = mysql.connector.connect(
   host="localhost",
   user="root",
   password="1234",
-  database="admin"
+  database="irctc_python"
 )
 
 cursor = conn.cursor()
@@ -25,9 +25,6 @@ cursor.execute("SELECT * FROM EmpData;")
 
 data = cursor.fetchall()
 
-for rows in data:
-	print(rows)
-
 
 class IrctcApp:
 
@@ -37,3 +34,4 @@ class IrctcApp:
 
     def searchTrains(trains):
       pass
+
