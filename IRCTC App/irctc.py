@@ -25,6 +25,9 @@ cursor.execute("SELECT * FROM EmpData;")
 
 data = cursor.fetchall()
 
+for rows in data:
+  print(rows)
+
 
 class IrctcApp:
 
