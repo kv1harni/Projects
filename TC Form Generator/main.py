@@ -47,6 +47,36 @@ def check_student(adm_no):
         return False
 
 
+#=========================================================================
+#Helper function
+#=========================================================================
+def get_student_detail(adm_no = None):
+    global adm_nos
+    global data_dict
+    rows = [row for row in data_dict]
+
+    student_dict = None
+    if check_student(adm_no) == True:
+        for row in rows:
+            if row['Admission Number'] == str(adm_no) + ".0":
+                student_dict = row
+                break
+
+        return student_dict
+
+    elif check_student(adm_no) == False:
+        return f"Student with admission number {adm_no} does not exist"
+
+
+#Tc Details Generator============================================
+def generate_tc(adm_no = None):
+    if adm_no == None:
+        adm_no = int(input("Enter A Adm No."))
+
+    stDetails = get_student_detail(adm_no)
+
+    print(stDetails)
+
 # ========================================================================
 # CHECK DETAILS FUNCTION
 # ========================================================================
@@ -104,10 +134,9 @@ def main_menu():
 
     user_choice = int(input("Enter you choice: "))
 
-    os.system("clear")
 
     if user_choice == 1:
-        print("Sorry, but this feature is not yet completed")
+        generate_tc()
 
     elif user_choice == 2:
         student_detail()
