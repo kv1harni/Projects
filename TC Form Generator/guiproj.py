@@ -10,18 +10,39 @@ root = Tk()
 def readExcel(fileName):
     return ""
 
+def check_student(adm_no):
+    # adm_no = int(input("Enter Admission Number of student: "))
+    global adm_nos
+
+    if adm_no in adm_nos:
+        return True
+
+    elif adm_no not in adm_nos:
+        return False
+
+
 def GenerateTcForm():
     treeFocousData = tree.item(tree.focus())
     st_details = treeFocousData["values"]
+    st_details_dict = {
+            "adm_no" : st_details[0],
+            "std_name" : st_details[1],
+            "f_name" : st_details[2],
+            "m_name" : st_details[3],
+            "class" : st_details[4],
+            "section" : st_details[5],
+            "session" : st_details[6]
+    }
+    print(st_details_dict)
     print(f"""
     =============K.V. No - 1 Harni Road vadodara===========
     ------------------Transfer Certificate-----------------\n\n
-    Name of student : {st_details[1]}
-    Adminssion Number : {st_details[0]}
-    father\'s Name : {st_details[2]}
-    Mother\'s Name : {st_details[3]}
-    Class & Section : {st_details[4]} {st_details[5]}
-    Session : {st_details[6]}
+    Name of student : {st_details_dict['std_name']}
+    Adminssion Number : {st_details_dict['adm_no']}
+    father\'s Name : {st_details_dict['f_name']}
+    Mother\'s Name : {st_details_dict['m_name']}
+    Class & Section : {st_details_dict['class']} {st_details_dict['section']}
+    Session : {st_details_dict['session']}
     """)
 
 def OpenFile():
@@ -31,7 +52,8 @@ def OpenFile():
             filename = r"{}".format(filename)
             df = pd.read_excel(filename)
 
-        except:
+        except Exception as e:
+            print(e)
             messagebox.showerror("Error", "You can\'t access this file type")
 
         
