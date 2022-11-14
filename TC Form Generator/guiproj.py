@@ -2,7 +2,10 @@ import tkinter as tk
 from tkinter import *
 from tkinter import messagebox, ttk, filedialog 
 import pandas as pd
-import numpy 
+from PIL import Image, ImageDraw, ImageFont
+from datetime import date
+
+
 # import studenTcGenerator as stg
 root = Tk()
 
@@ -20,8 +23,7 @@ def check_student(adm_no):
     elif adm_no not in adm_nos:
         return False
 
-
-def GenerateTcForm():
+def formDetails() -> dict:
     treeFocousData = tree.item(tree.focus())
     st_details = treeFocousData["values"]
     st_details_dict = {
@@ -29,20 +31,54 @@ def GenerateTcForm():
             "std_name" : st_details[1],
             "f_name" : st_details[2],
             "m_name" : st_details[3],
-            "class" : st_details[4],
+            "class" : int(st_details[4][:-2]),
             "section" : st_details[5],
-            "session" : st_details[6]
+            "session" : st_details[6],
+            "local_address" : st_details[7]
     }
-    print(st_details_dict)
+    return st_details_dict
+
+
+def GenerateTcForm():
+    student = formDetails()
+    form_img = Image.open("formimg.jpg")
+    form_img_draw = ImageDraw.Draw(form_img)
+    myFont = ImageFont.truetype('Arial.ttf', 20)
+
+    # Date of Application
+    form_img_draw.text((650, 260), str(date.today()), fill =(0, 0, 0),font=myFont)
+
+    # Student Name
+    form_img_draw.text((650, 293), student['std_name'], fill =(0, 0, 0),font=myFont)
+    
+    # Class-Section (with year)
+    form_img_draw.text((650, 327), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
+    
+    # Father's Name 33diff
+    form_img_draw.text((650, 360), student['f_name'], fill =(0, 0, 0),font=myFont)
+
+    # Mother's name 
+    form_img_draw.text((650, 393), student['m_name'], fill =(0, 0, 0),font=myFont)
+
+    # Local Address
+    form_img_draw.text((650, 433), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
+
+    # Reason to leave
+    # ----------------------
+    
+
+    form_img.show()
+
+    print(student)
     print(f"""
     =============K.V. No - 1 Harni Road vadodara===========
     ------------------Transfer Certificate-----------------\n\n
-    Name of student : {st_details_dict['std_name']}
-    Adminssion Number : {st_details_dict['adm_no']}
-    father\'s Name : {st_details_dict['f_name']}
-    Mother\'s Name : {st_details_dict['m_name']}
-    Class & Section : {st_details_dict['class']} {st_details_dict['section']}
-    Session : {st_details_dict['session']}
+    Name of student : {student['std_name']}
+    Adminssion Number : {student['adm_no']}
+    father\'s Name : {student['f_name']}
+    Mother\'s Name : {student['m_name']}
+    Class & Section : {student['class']} {student['section']}
+    Session : {student['session']}
     """)
 
 def OpenFile():
