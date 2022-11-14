@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox, ttk, filedialog 
 import pandas as pd
 import numpy 
-
+# import studenTcGenerator as stg
 root = Tk()
 
     
@@ -11,8 +11,18 @@ def readExcel(fileName):
     return ""
 
 def GenerateTcForm():
-    print(tree.item(tree.focus()))
-
+    treeFocousData = tree.item(tree.focus())
+    st_details = treeFocousData["values"]
+    print(f"""
+    =============K.V. No - 1 Harni Road vadodara===========
+    ------------------Transfer Certificate-----------------\n\n
+    Name of student : {st_details[1]}
+    Adminssion Number : {st_details[0]}
+    father\'s Name : {st_details[2]}
+    Mother\'s Name : {st_details[3]}
+    Class & Section : {st_details[4]} {st_details[5]}
+    Session : {st_details[6]}
+    """)
 
 def OpenFile():
     filename = filedialog.askopenfilename(title="Open Student Details Excel File", filetypes=[("xlxs files", ".*xlsx"), ("All Files", "*.")])
