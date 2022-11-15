@@ -1,0 +1,10 @@
+CREATE TABLE `tcformgenerator`.`studentdetails` (
+  `admin_no` INT NOT NULL,
+  `st_name` VARCHAR(45) NULL,
+  `st_father_name` VARCHAR(45) NULL,
+  `st_mother_name` VARCHAR(45) NULL,
+  `st_class` INT NULL,
+  `st_section` VARCHAR(1) NULL,
+  `st_session` VARCHAR(20) NULL,
+  `st_address` VARCHAR(200) NULL,
+  PRIMARY KEY (`admin_no`));
