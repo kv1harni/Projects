@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import messagebox, ttk, filedialog 
+from tkinter import messagebox, ttk, filedialog, simpledialog
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 from datetime import date
@@ -12,6 +12,35 @@ root = Tk()
     
 def readExcel(fileName):
     return ""
+
+#Define a function to close the popup window
+def close_win(top):
+   top.destroy()
+
+def insert_val(e):
+   e.insert(0, "Hello World!")
+
+#Define a function to open the Popup Dialogue
+
+#creating pop up for field details
+def popupwin():
+   #Create a Toplevel window
+
+   #Create an Entry Widget in the Toplevel window
+   USER_INP = simpledialog.askstring(title="Test",
+                                  prompt="What's your Reason? for tc\nErite in about 50 characters only:\n\n\n-----------------------------------------------------------------------", )
+
+   GenerateTcForm(USER_INP)
+#    #Create a Button to print something in the Entry widget
+#    Button(top,text= "Insert", command= GenerateTcForm(USER_INP)).pack(pady= 5,side=TOP)
+#    #Create a Button Widget in the Toplevel Window
+#    button= Button(top, text="Ok", command=lambda:close_win(top))
+#    button.pack(pady=5, side= TOP)
+
+
+
+
+
 
 def check_student(adm_no):
     # adm_no = int(input("Enter Admission Number of student: "))
@@ -28,8 +57,12 @@ def formDetails() -> dict:
     treeFocousData = tree.item(tree.focus())
     st_details = treeFocousData["values"]
 
+
     for i in range(9, 14):
-        subs.append(st_details[i])
+        if i != "nan":
+            subs.append(st_details[i])
+        else:
+            continue
 
     st_details_dict = {
             "adm_no" : st_details[0],
@@ -45,32 +78,29 @@ def formDetails() -> dict:
     return st_details_dict
 
 
-def GenerateTcForm():
+def GenerateTcForm(reason):
     student = formDetails()
     form_img = Image.open("formimg.jpg")
     form_img_draw = ImageDraw.Draw(form_img)
     myFont = ImageFont.truetype('Arial.ttf', 20)
 
     # Date of Application
-    form_img_draw.text((650, 257), str(date.today()), fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 260), str(date.today()), fill =(0, 0, 0),font=myFont)
 
     # Student Name
-    form_img_draw.text((650, 290), student['std_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 293), student['std_name'], fill =(0, 0, 0),font=myFont)
     
     # Class-Section (with year)
-    form_img_draw.text((650, 324), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 327), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
     
     # Father's Name 33diff
-    form_img_draw.text((650, 357), student['f_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 360), student['f_name'], fill =(0, 0, 0),font=myFont)
 
     # Mother's name 
-    form_img_draw.text((650, 390), student['m_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 393), student['m_name'], fill =(0, 0, 0),font=myFont)
 
     # Local Address
-    form_img_draw.text((650, 430), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
-
-    # Reason to leave
-    # ----------------------
+    form_img_draw.text((650, 433), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
 
     subs = ""
     for i in student['subjects']:
@@ -78,23 +108,19 @@ def GenerateTcForm():
     subs = subs[:-1]
     # Subjects
     form_img_draw.text((650, 521), subs, fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 14))
-    print(subs)
+    print(subs)   
     
+
+    # Reason to leave
+    form_img_draw.text((650, 465), reason,
+                     fill =(0, 0, 0), font=ImageFont.truetype('Arial.ttf', 12))
+    
+
 
     form_img.show()
 
     print(student)
-    print(f"""
-    =============K.V. No - 1 Harni Road vadodara===========
-    ------------------Transfer Certificate-----------------\n\n
-    Name of student : {student['std_name']}
-    Adminssion Number : {student['adm_no']}
-    father\'s Name : {student['f_name']}
-    Mother\'s Name : {student['m_name']}
-    Class & Section : {student['class']} {student['section']}
-    Session : {student['session']}
-    """)
-
+    
 def OpenFile():
     filename = filedialog.askopenfilename(title="Open Student Details Excel File", filetypes=[("xlxs files", ".*xlsx"), ("All Files", "*.")])
     if filename: 
@@ -139,7 +165,8 @@ def OpenFile():
         tree.insert("", "end", values=row)
 
     #button
-    btn2 = Button(root, text="Generate Tc", width=30, height=2, font=20, fg = "white", bg="#0078d7", command=GenerateTcForm)
+    btn2 = Button(root, text="Generate Tc", width=30, height=2, font=20,
+                  fg = "white", bg="#0078d7", command=popupwin)
     btn2.pack(padx=10, pady=20)
 
 
