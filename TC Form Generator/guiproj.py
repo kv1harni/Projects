@@ -24,8 +24,13 @@ def check_student(adm_no):
         return False
 
 def formDetails() -> dict:
+    subs = []
     treeFocousData = tree.item(tree.focus())
     st_details = treeFocousData["values"]
+
+    for i in range(9, 14):
+        subs.append(st_details[i])
+
     st_details_dict = {
             "adm_no" : st_details[0],
             "std_name" : st_details[1],
@@ -34,7 +39,8 @@ def formDetails() -> dict:
             "class" : int(st_details[4][:-2]),
             "section" : st_details[5],
             "session" : st_details[6],
-            "local_address" : st_details[7]
+            "local_address" : st_details[7],
+            "subjects" : subs
     }
     return st_details_dict
 
@@ -46,25 +52,33 @@ def GenerateTcForm():
     myFont = ImageFont.truetype('Arial.ttf', 20)
 
     # Date of Application
-    form_img_draw.text((650, 260), str(date.today()), fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 257), str(date.today()), fill =(0, 0, 0),font=myFont)
 
     # Student Name
-    form_img_draw.text((650, 293), student['std_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 290), student['std_name'], fill =(0, 0, 0),font=myFont)
     
     # Class-Section (with year)
-    form_img_draw.text((650, 327), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 324), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
     
     # Father's Name 33diff
-    form_img_draw.text((650, 360), student['f_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 357), student['f_name'], fill =(0, 0, 0),font=myFont)
 
     # Mother's name 
-    form_img_draw.text((650, 393), student['m_name'], fill =(0, 0, 0),font=myFont)
+    form_img_draw.text((650, 390), student['m_name'], fill =(0, 0, 0),font=myFont)
 
     # Local Address
-    form_img_draw.text((650, 433), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
+    form_img_draw.text((650, 430), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
 
     # Reason to leave
     # ----------------------
+
+    subs = ""
+    for i in student['subjects']:
+        subs = subs + i + ","
+    subs = subs[:-1]
+    # Subjects
+    form_img_draw.text((650, 521), subs, fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 14))
+    print(subs)
     
 
     form_img.show()
