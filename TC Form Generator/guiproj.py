@@ -4,6 +4,7 @@ from tkinter import messagebox, ttk, filedialog, simpledialog
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 from datetime import date
+import csv
 
 
 # import studenTcGenerator as stg
@@ -12,6 +13,14 @@ root = Tk()
     
 def readExcel(fileName):
     return ""
+
+
+
+
+
+
+
+
 
 #Define a function to close the popup window
 def close_win(top):
@@ -169,8 +178,25 @@ def OpenFile():
                   fg = "white", bg="#0078d7", command=popupwin)
     btn2.pack(padx=10, pady=20)
 
+#search function ====================================================
+def call_result(entry_value):  
+    value1 = (entry_value.get())   
+    print(value1)
 
+def searchStudent():
+    newPopup = Toplevel(frame)
+    newPopup.title('Search for Student')
 
+    logophoto = tk.PhotoImage(file = 'logo.png')
+    newPopup.wm_iconphoto(False, logophoto)
+    newPopup.geometry("500x500")
+
+    entry_value = tk.StringVar()
+    x = Entry(newPopup, textvariable=entry_value)
+    x.place(relx = 0.2, rely=0.2)
+    
+    b1 = Button(newPopup, text = "search", command=call_result(entry_value))
+    b1.place(relx=0.4, rely=0.4)
 
 root.title("Transfer form Generator")
 root.geometry("1100x550+200+200")
@@ -183,7 +209,7 @@ root.wm_iconphoto(False, logophoto)
 frame = Frame(root)
 frame.pack(pady=25)
 
-#treeView
+
 
 tree = ttk.Treeview(frame)
 treeScroll = Scrollbar(frame)
@@ -202,6 +228,8 @@ tree.config(xscrollcommand= treeScroll2.set)
 btn = Button(root, text="Open", width=60, height=2, font=30, fg = "white", bg="#0078d7", command=OpenFile)
 btn.pack(padx=10, pady=20)
 
+btn3 = Button(root, text="Search", width=60, height=2, font=30, fg = "white", bg="#0078d7", command=searchStudent)
+btn3.pack(padx=10, pady=20)
 
 
 root.mainloop()
