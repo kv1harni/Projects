@@ -7,35 +7,50 @@ root = Tk()
 root.geometry("1080x600")
 
 
+#===============frame 2===============================
+sheet_frame = Frame(bd = 4, relief=RIDGE)
 
-sheet_frame = Frame()
-sheet_frame.place(relx=0.35, y=0, relheight=0.97, relwidth=0.62)
-
-sheet_scrolly = Scrollbar(sheet_frame)
-sheet_scrollx = Scrollbar(sheet_frame, orient=HORIZONTAL)
-
-sheet_scrollx.pack(side=BOTTOM, fill=X)
-sheet_scrolly.pack(side=RIGHT, fill=Y)
-
+#creating A Tree View
 sheet_tree = ttk.Treeview(sheet_frame)
 
-sheet_scrolly.config(command=sheet_tree.yview)
-sheet_scrollx.config(command=sheet_tree.xview)
+#placing the tree
+sheet_frame.place(relx=0.35, y=0, relheight=0.97, relwidth=0.62)
 
-sheet_tree.config(yscrollcommand=sheet_scrolly.set)
-sheet_tree.config(xscrollcommand=sheet_scrollx.set)
-sheet_tree.config(selectmode=BROWSE)
 
+#========================================================
+# #adding scroll bars---------
+# sheet_scrolly = Scrollbar(sheet_frame)
+# sheet_scrollx = Scrollbar(sheet_frame, orient=HORIZONTAL)
+
+# sheet_scrollx.pack(side=BOTTOM, fill=X)
+# sheet_scrolly.pack(side=RIGHT, fill=Y)
+
+# #packing the scroll bar ------------------------------
+# sheet_tree.pack()
+
+# #internal configs for scrollbars
+# sheet_scrolly.config(command=sheet_tree.yview)
+# sheet_scrollx.config(command=sheet_tree.xview)
+
+# sheet_tree.config(yscrollcommand=sheet_scrolly.set)
+# sheet_tree.config(xscrollcommand=sheet_scrollx.set)
+# sheet_tree.config(selectmode=BROWSE)
+
+#Global FIle open/closed variable--------------
+fileStatus = False
+
+#A global Reason Button
 reason_button = None
 
 
 def file_open():
+    global fileStatus
     filename = filedialog.askopenfile(
         initialdir="./",
         title="Select students data sheet",
         filetypes=(('Excel File', '*.xlsx'), ('CSV File', '*.csv'), ("All Files", "*.*"))
     )
-    
+
 
     print(str(filename))
     if filename:
@@ -62,11 +77,33 @@ def file_open():
         for row in df_rows:
             sheet_tree.insert("", "end", values=row)
         
+        #adding scroll bars---------
+        if fileStatus == False:
+            sheet_scrolly = Scrollbar(sheet_frame)
+            sheet_scrollx = Scrollbar(sheet_frame, orient=HORIZONTAL)
+
+            sheet_scrollx.pack(side=BOTTOM, fill=X)
+            sheet_scrolly.pack(side=RIGHT, fill=Y)
+
+            #packing the scroll bar ------------------------------
+            sheet_tree.pack()
+
+            #internal configs for scrollbars
+            sheet_scrolly.config(command=sheet_tree.yview)
+            sheet_scrollx.config(command=sheet_tree.xview)
+
+            sheet_tree.config(yscrollcommand=sheet_scrolly.set)
+            sheet_tree.config(xscrollcommand=sheet_scrollx.set)
+            sheet_tree.config(selectmode=BROWSE)
+
         
-        gen_button.config(state=ACTIVE)
-        # global reason_button
-        # reason = 
+            gen_button.config(state=ACTIVE)
+
+        else:
+            pass
+        
         sheet_tree.place(x=0, y=0, relheight=1, relwidth=1)
+    fileStatus = True
 
 def clear_tree():
     sheet_tree.delete(*sheet_tree.get_children())
@@ -76,15 +113,15 @@ def get_selected():
     print(row)
 
 
-
+#==================frame1=============================================
 # SETTING THE BUTTONS IN THE MENU THING
-
 menu_frame = Frame()
 menu_frame.place(relx=0, rely=0, relheight=1, relwidth=0.30)
 
 sheet_button = Button(menu_frame, text="Open File", width=30, height=2, font=20, fg = "white", bg="#0078d7", command=file_open)
 sheet_button.place(x=0, y=0)
 
+#
 gen_button = Button(menu_frame, text="Generate Tc", width=30, height=2, font=20, fg = "white", bg="#0078d7", command=get_selected, state=DISABLED)
 gen_button.place(x=0, y=60)
 
