@@ -1,11 +1,10 @@
-from colorama import Cursor
 import pymysql
 from telegram import Credentials
 
 sqlCredentials = {
-  "mySqlPassword": "pass",
-  "sqlUserName": "userName",
-  "database": "databaseName"
+  "mySqlPassword": "wVwYzJO5tv",
+  "sqlUserName": "2BKSEWqFDK",
+  "database": "2BKSEWqFDK"
 }
 
 serverConnection = pymysql.connect(
