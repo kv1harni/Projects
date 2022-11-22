@@ -1,4 +1,4 @@
-import csv, sys, re
+import csv, sys
 import os
 
 # Dictionary of all elements matched with their atomic masses.
@@ -32,6 +32,10 @@ elements_dict = {'H' : 1.008,'HE' : 4.003, 'LI' : 6.941, 'BE' : 9.012,\
                  'NH' : 284, 'FL' : 289, 'MC' : 288, 'LV' : 292, 'TS' : 294,\
                  'OG' : 294}
 
+
+
+
+
 # List of all elements to allow for easy inclusion testing.
 elements_list = ['H', 'HE', 'LI', 'BE', 'B', 'C', 'N', 'O', 'F', 'NE', 'NA',\
                  'MG', 'AL', 'SI', 'P', 'S', 'CL', 'AR', 'K', 'CA', 'SC', 'TI',\
@@ -45,6 +49,11 @@ elements_list = ['H', 'HE', 'LI', 'BE', 'B', 'C', 'N', 'O', 'F', 'NE', 'NA',\
                  'NP', 'PU', 'AM', 'CM', 'BK', 'CT', 'ES', 'FM', 'MD', 'NO',\
                  'LR', 'RF', 'DB', 'SG', 'BH', 'HS', 'MT', 'DS', 'RG', 'CN',\
                  'NH', 'FL', 'MC', 'LV', 'TS', 'OG']
+
+
+
+
+
 
 def atomicMassCalculator():
     print('************************************************************************************************************************')
@@ -66,75 +75,83 @@ def atomicMassCalculator():
 
     # Continue to ask for a new formula until the user inputs a "q" for quit.
     # while formula != ["Q"]:
-    if formula != ["Q"]:
-        # Set the conditons for a new loop.
-        atomic_mass_float = 0.0
-        invalid_input = False
-        coefficient = 1
-        
-        # Loop through each index in the formula.
-        for i, ch in enumerate(formula):
-            # If the character is an element, check if the next character in the
-            # formula is an integer.
-            if ch in elements_list:
-                element_mass = elements_dict.get(ch)
-                # If the next character is an integer, multiply the element's mass 
-                # by that integer and add it to the running sum.
-                if formula[i + 1].isdigit() == True:
-                    atomic_mass_float += element_mass * int(formula[i + 1])
-                # If not, just add that element's mass to the sum.
-                else:
-                    atomic_mass_float += element_mass
-            # If the charcter is an integer
-            elif ch.isdigit() == True:
-                # If the first index is an integer, assume that that is a
-                # coefficient for the formula and multiply the formula by that
-                # number
-                if i == 0:
-                    coefficient = int(ch)
-                # Make sure the previous index wasn't an integer as well
-                # (the integer needs an element to multiply), if it was, let the
-                # program know that there is an error.
-                elif formula[i - 1].isalpha() == False:
+    while True:
+        if formula != ["Q"]:
+            # Set the conditons for a new loop.
+            atomic_mass_float = 0.0
+            invalid_input = False
+            coefficient = 1
+            
+            # Loop through each index in the formula.
+            for i, ch in enumerate(formula):
+                # If the character is an element, check if the next character in the
+                # formula is an integer.
+                if ch in elements_list:
+                    element_mass = elements_dict.get(ch)
+                    # If the next character is an integer, multiply the element's mass 
+                    # by that integer and add it to the running sum.
+                    if formula[i + 1].isdigit() == True:
+                        atomic_mass_float += element_mass * int(formula[i + 1])
+                    # If not, just add that element's mass to the sum.
+                    else:
+                        atomic_mass_float += element_mass
+                # If the charcter is an integer
+                elif ch.isdigit() == True:
+                    # If the first index is an integer, assume that that is a
+                    # coefficient for the formula and multiply the formula by that
+                    # number
+                    if i == 0:
+                        coefficient = int(ch)
+                    # Make sure the previous index wasn't an integer as well
+                    # (the integer needs an element to multiply), if it was, let the
+                    # program know that there is an error.
+                    elif formula[i - 1].isalpha() == False:
+                        invalid_input = True
+                    else:
+                        pass
+                # If the only character in the formula is an integer, let the program
+                # know that there is an error.
+                elif ch.isdigit() == True and len(formula) == 1:
                     invalid_input = True
+                # If a character is not an element or an integer, let the program know
+                # that there is an error.
                 else:
-                    pass
-            # If the only character in the formula is an integer, let the program
-            # know that there is an error.
-            elif ch.isdigit() == True and len(formula) == 1:
-                invalid_input = True
-            # If a character is not an element or an integer, let the program know
-            # that there is an error.
+                    invalid_input = True
+            
+            # Muliply the entire atomic mass by the coefficient.
+            atomic_mass_float *= coefficient
+            
+            # If there was an error in the program, display the appropriate error.
+            if invalid_input == True:
+                # Error for if there is only an integer entered.
+                if ch.isdigit() == True and len(formula) == 1:
+                    print("You must enter at least one element for every integer\
+        subscript.")
+                    print()
+                # Error for if there is a float or non-elemnt entered.
+                else:
+                    print("Please enter only the atomic symbols of elements or an integer\
+        subscript.")
+                    print()
+            
+            # If there was no error, then print the claculated atomic mass
             else:
-                invalid_input = True
-        
-        # Muliply the entire atomic mass by the coefficient.
-        atomic_mass_float *= coefficient
-        
-        # If there was an error in the program, display the appropriate error.
-        if invalid_input == True:
-            # Error for if there is only an integer entered.
-            if ch.isdigit() == True and len(formula) == 1:
-                print("You must enter at least one element for every integer\
-    subscript.")
+                print("Atomic Mass: ", round(atomic_mass_float, 3))
                 print()
-            # Error for if there is a float or non-elemnt entered.
-            else:
-                print("Please enter only the atomic symbols of elements or an integer\
-    subscript.")
-                print()
-        
-        # If there was no error, then print the claculated atomic mass
-        else:
-            print("Atomic Mass: ", round(atomic_mass_float, 3))
+            
+            # Ask for another formula.
+            formula = input("Enter a formula or type 'q' to quit: ").upper().split()
             print()
-        
-        # Ask for another formula.
-        formula = input("Enter a formula or type 'q' to quit: ").upper().split()
-        print()
 
-    elif formula == ["Q"]:
-        menu()
+        elif formula == ["Q"]:
+            menu()
+
+
+
+
+
+
+
 def elementInfo():
     print('************************************************************************************************************************')
     print('                                   KENDRIYA VIDYALAYA No.1,VADODARA     ')
@@ -182,16 +199,14 @@ def elementInfo():
 
     
 
-        for key, value in element.items():
-            # Remove the [roman numeral] text:
-            element[key] = re.sub(r'\[(I|V|X)+\]', '', value)
-
         ELEMENTS[line[0]] = element  # Map the atomic number to the element.
         ELEMENTS[line[1]] = element  # Map the symbol to the element.
 
     print('Periodic Table of Elements')
 
     print()
+
+    
 
     while True:  # Main program loop.
         # Show table and let the user select an element:
@@ -219,7 +234,10 @@ def elementInfo():
                     keyJustified = key.rjust(LONGEST_COLUMN)
                     print(keyJustified + ': ' + ELEMENTS[response][key])
             input('Press Enter to continue...')
-            
+
+
+
+
 
 
 def menu():
