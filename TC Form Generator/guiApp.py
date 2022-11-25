@@ -9,7 +9,7 @@ root = Tk()
 root.geometry("1080x600")
 root.title('K.V. No.1 Vadodara Student Tc System - developed by [Aayush & Omkar]')
 #icon==========================================
-logophoto = PhotoImage(file = './TC Form Generator/logo.png')
+logophoto = PhotoImage(file = 'logo.png')
 root.wm_iconphoto(False, logophoto)
 
 #===============frame 2===============================
@@ -31,10 +31,10 @@ fileName = None
 #A global Reason Button
 reason_button = None
 
-def GenerateTcFormImg(student, reason, obj):
+def GenerateTcFormImg(student, reason):
 
 
-        form_img = Image.open("./TC Form Generator/formimg.jpg")
+        form_img = Image.open("formimg.jpg")
         form_img_draw = ImageDraw.Draw(form_img)
         myFont = ImageFont.truetype('Arial.ttf', 20)
 
@@ -81,12 +81,12 @@ def generateFormDetails(st_details) -> dict:
         #Running a for loop To Append Subject List to A dict
         for i in range(9, 14):
             #if Sub is Not None Append it
-            if i != "nan":
-                subs.append(st_details[i])
+            if i == "nan":
+                continue
             
             #if sub is None Continue the loop ignoring that Sub
             else:
-                continue
+                subs.append(st_details[i])
         
         #creating a Dict that stores Data extracted from the 
         #Tkinter Tree  Object
@@ -120,19 +120,24 @@ def popUpButton():
     top = Toplevel(root)
     top.title("Provide a reason For Your tc")
     #icon==========================================
-    # logophoto = PhotoImage(file = './TC Form Generator/logo.png')
+    # logophoto = PhotoImage(file = 'logo.png')
     # top.wm_iconphoto(False, logophoto)
     top.geometry('400x300')
 
     top_heading = Label(top, text="Enter the reason:", font=12)
-    top_heading.place(relx=0.36, rely=0.4)
+    top_heading.place(relx=0.05, rely=0.4)
 
     top_entry = Entry(top)
-    top_entry.place(relx=0.67, rely=0.4)
+    top_entry.place(relx=0.05, rely=0.4)
 
-    top_button = Button(top, text="Submit", width=10, height=1, font=10, command=FormGeneratorCallback(top_entry.get()))
+    top_button = Button(top, text="Submit", width=10, height=1, font=10, command= lambda : kill_main(top_entry))
     top_button.place(relx=0.5, rely=0.6)
 
+    def kill_main(top_entry):
+        FormGeneratorCallback(top_entry.get())
+        top.destroy()
+        top.update()
+        
 
 
     #Elements Of Top--------------------------------------------------------
