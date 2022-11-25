@@ -122,16 +122,16 @@ def popUpButton():
     #icon==========================================
     # logophoto = PhotoImage(file = 'logo.png')
     # top.wm_iconphoto(False, logophoto)
-    top.geometry('400x300')
+    top.geometry('300x100')
 
     top_heading = Label(top, text="Enter the reason:", font=12)
-    top_heading.place(relx=0.05, rely=0.4)
+    top_heading.place(relx=0.35, rely=0.2)
 
     top_entry = Entry(top)
-    top_entry.place(relx=0.05, rely=0.4)
+    top_entry.place(relx=0, rely=0.4, relwidth=1)
 
     top_button = Button(top, text="Submit", width=10, height=1, font=10, command= lambda : kill_main(top_entry))
-    top_button.place(relx=0.5, rely=0.6)
+    top_button.place(relx=0.35, rely=0.6)
 
     def kill_main(top_entry):
         FormGeneratorCallback(top_entry.get())
