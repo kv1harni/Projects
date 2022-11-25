@@ -2,12 +2,14 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox, PhotoImage
 import pandas as pd
 from tcgenerator import TcGeneratorApp
+from PIL import Image, ImageDraw, ImageFont
+from datetime import date
 
 root = Tk()
 root.geometry("1080x600")
 root.title('K.V. No.1 Vadodara Student Tc System - developed by [Aayush & Omkar]')
 #icon==========================================
-logophoto = PhotoImage(file = 'logo.png')
+logophoto = PhotoImage(file = './TC Form Generator/logo.png')
 root.wm_iconphoto(False, logophoto)
 
 #===============frame 2===============================
@@ -29,6 +31,77 @@ fileName = None
 #A global Reason Button
 reason_button = None
 
+def GenerateTcFormImg(student, reason, obj):
+
+
+        form_img = Image.open("./TC Form Generator/formimg.jpg")
+        form_img_draw = ImageDraw.Draw(form_img)
+        myFont = ImageFont.truetype('Arial.ttf', 20)
+
+        # Date of Application
+        form_img_draw.text((650, 260), str(date.today()), fill =(0, 0, 0),font=myFont)
+
+        # Student Name
+        form_img_draw.text((650, 293), student['std_name'], fill =(0, 0, 0),font=myFont)
+        
+        # Class-Section (with year)
+        form_img_draw.text((650, 327), f"{student['class']}-{student['section']}  ({student['session']})", fill =(0, 0, 0),font=myFont)
+        
+        # Father's Name 33diff
+        form_img_draw.text((650, 360), student['f_name'], fill =(0, 0, 0),font=myFont)
+
+        # Mother's name 
+        form_img_draw.text((650, 393), student['m_name'], fill =(0, 0, 0),font=myFont)
+
+        # Local Address
+        form_img_draw.text((650, 433), student['local_address'], fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 12))
+
+        subs = ""
+        for subject in student['subjects']:
+            subs = subs + subject + ","
+        subs = subs[:-1]
+
+        # Subjects
+        form_img_draw.text((650, 521), subs, fill =(0, 0, 0),font=ImageFont.truetype('Arial.ttf', 14))
+        print(subs)   
+        
+
+        # Reason to leave
+        form_img_draw.text((650, 465), reason,
+                        fill =(0, 0, 0), font=ImageFont.truetype('Arial.ttf', 12))
+        
+
+
+        form_img.show()
+
+
+def generateFormDetails(st_details) -> dict:
+        subs = []
+        
+        #Running a for loop To Append Subject List to A dict
+        for i in range(9, 14):
+            #if Sub is Not None Append it
+            if i != "nan":
+                subs.append(st_details[i])
+            
+            #if sub is None Continue the loop ignoring that Sub
+            else:
+                continue
+        
+        #creating a Dict that stores Data extracted from the 
+        #Tkinter Tree  Object
+        st_details_dict = {
+                "adm_no" : st_details[0],
+                "std_name" : st_details[1],
+                "f_name" : st_details[2],
+                "m_name" : st_details[3],
+                "class" : int(st_details[4][:-2]),
+                "section" : st_details[5],
+                "session" : st_details[6],
+                "local_address" : st_details[7],
+                "subjects" : subs
+        }
+        return st_details_dict
 
 #A CallBack Function that helps with calling 
 #the Opps functions in tkinter
@@ -37,28 +110,38 @@ def FormGeneratorCallback(reason):
     st_details = treeFocousData["values"]
 
     #calling a function from TcApp module
-    student = TcGeneratorApp.generateFormDetails(st_details)
-    TcGeneratorApp.GenerateTcFormImg(student=student, reason=reason)
+    student = generateFormDetails(st_details)
+    GenerateTcFormImg(student=student, reason=reason)
+    print(student)  
+    
 
 
 def popUpButton():
     top = Toplevel(root)
     top.title("Provide a reason For Your tc")
     #icon==========================================
-    logophoto = PhotoImage(file = 'logo.png')
-    top.wm_iconphoto(False, logophoto)
+    # logophoto = PhotoImage(file = './TC Form Generator/logo.png')
+    # top.wm_iconphoto(False, logophoto)
     top.geometry('400x300')
-    
+
+    top_heading = Label(top, text="Enter the reason:", font=12)
+    top_heading.place(relx=0.36, rely=0.4)
+
+    top_entry = Entry(top)
+    top_entry.place(relx=0.67, rely=0.4)
+
+    top_button = Button(top, text="Submit", width=10, height=1, font=10, command=FormGeneratorCallback(top_entry.get()))
+    top_button.place(relx=0.5, rely=0.6)
+
 
 
     #Elements Of Top--------------------------------------------------------
-    topHeading = Label(top, text="Provide A valid reason for your Tc\nIn less than 100 characters", font=12)
-    topHeading.place(x=10, y=100)
-    top_entry = Entry(top)
-    top_entry.focus()
-    top_entry.place(x=10, y=150, relwidth=0.70)
-    top_button = Button(top, text="Submit", width=10, height=1, font=10, fg = "white", bg="red", padx=4, command=FormGeneratorCallback(top_entry.get()))
-    top_button.place(x=10, y=180)
+    # topHeading = Label(top, text="Provide A valid reason for your Tc\nIn less than 100 characters", font=12)
+    # topHeading.place(x=10, y=100)
+    # top_entry = Entry(top)
+    # # top_entry.focus()
+    # top_entry.place(x=10, y=150, relwidth=0.70)
+
 
 
 
