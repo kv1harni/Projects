@@ -1,5 +1,5 @@
-import csv, sys
-import os
+import csv, sys, os
+
 
 # Dictionary of all elements matched with their atomic masses.
 elements_dict = {'H' : 1.008,'HE' : 4.003, 'LI' : 6.941, 'BE' : 9.012,\
