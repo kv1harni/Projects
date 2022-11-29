@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox, PhotoImage
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 from datetime import date
+import subprocess
 
 # Creating the main tkinter object
 root = Tk()
@@ -91,11 +92,11 @@ def GenerateTcFormImg(student, reason):
     form_img_draw.text((650, 465), reason,
                        fill=(0, 0, 0), font=ImageFont.truetype('./assets/Arial.ttf', 12))
 
-    path = f"./{student['std_name']}_tc.png"
-    form_img.save(path, format='png')
-
-    image_saved = Image.open(path) 
-    image_saved.show()
+    img_name = f"{student['adm_no']}_{student['std_name']}_tc.png"
+    form_img.save(img_name, format='png')
+    
+    #using subprocess module to open the saved file
+    subprocess.call(img_name, shell=True)
 
 
 # Function for generating a student details dictionary
@@ -136,7 +137,6 @@ def FormGeneratorCallback(reason):
     # calling a function from TcApp module
     student = generateFormDetails(st_details)
     GenerateTcFormImg(student=student, reason=reason)
-    print(student)
 
 
 def popUpButton():
@@ -263,11 +263,13 @@ def clear_tree():
     sheet_tree.delete(*sheet_tree.get_children())
 
 
+#helper function that focous on a tkinter tree row
 def get_selected():
     row = sheet_tree.item(sheet_tree.focus())
     print(row)
 
 
+#Searches for student details in the excel sheet provided by the user
 def searchStudent():
     if fileStatus == False:
         messagebox.showerror(
