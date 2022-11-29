@@ -24,7 +24,7 @@ sheet_tree = ttk.Treeview(sheet_frame)
 sheet_frame.place(relx=0.35, y=0, relheight=0.97, relwidth=0.62)
 
 # school name variable
-school_name = "Kendriya Vidyala No. 1, Vadodara"
+school_name = "No. 1, Vadodara"
 
 # Global FIle open/closed variable--------------
 fileStatus = False
@@ -91,8 +91,11 @@ def GenerateTcFormImg(student, reason):
     form_img_draw.text((650, 465), reason,
                        fill=(0, 0, 0), font=ImageFont.truetype('./assets/Arial.ttf', 12))
 
-    form_img.show()
-    form_img.save(f"./{student['std_name']}_tc.png", format='png')
+    path = f"./{student['std_name']}_tc.png"
+    form_img.save(path, format='png')
+
+    image_saved = Image.open(path) 
+    image_saved.show()
 
 
 # Function for generating a student details dictionary
@@ -142,13 +145,14 @@ def popUpButton():
     # icon==========================================
     logophoto = PhotoImage(file='./assets/logo.png')
     top.wm_iconphoto(False, logophoto)
-    top.geometry('300x100')
+    top.geometry('350x150')
 
     top_heading = Label(top, text="Enter the reason:", font=12)
     top_heading.place(relx=0.35, rely=0.2)
 
     top_entry = Entry(top)
-    top_entry.place(relx=0, rely=0.4, relwidth=1)
+    top_entry.focus()
+    top_entry.place(relx=0.1, rely=0.4, relwidth=0.8)
 
     top_button = Button(top, text="Submit", width=10, height=1,
                         font=10, command=lambda: kill_main(top_entry))
@@ -318,6 +322,7 @@ search_heading = Label(
     menu_frame, text="Search Student details:\n(Enter admission number)", font=12)
 search_heading.place(x=0, y=280)
 search_entry = Entry(menu_frame)
+search_entry.focus()
 search_entry.place(x=5, y=320, relwidth=0.70)
 search_button = Button(menu_frame, text="Search", width=10, height=1,
                        font=10, fg="white", bg="#0078d7", padx=4, command=searchStudent)
@@ -325,6 +330,12 @@ search_button.place(relx=0.65, y=320)
 show_button = Button(menu_frame, text="show all", width=10, height=1,
                      font=10, fg="white", bg="#0078d7", padx=4, command=show_file_again)
 show_button.place(relx=0.65, y=360)
+
+
+
+search_heading = Label(
+    menu_frame, text="Made By :-\nAayush Mishra & Omkar Mahindrakar", font=12)
+search_heading.place(x=0, y=480)
 
 # Running the tkinter mainloop
 root.mainloop()
