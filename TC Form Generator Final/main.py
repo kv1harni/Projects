@@ -81,8 +81,8 @@ def GenerateTcFormImg(student, reason):
 
     subs = ""
     for subject in student['subjects']:
-        subs = subs + subject + ","
-    subs = subs[:-1]
+        subs = subs + subject + ", "
+    subs = subs[:-2]
 
     # Subjects
     form_img_draw.text((650, 521), subs, fill=(0, 0, 0),
